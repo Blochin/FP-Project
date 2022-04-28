@@ -26,6 +26,8 @@ source-repository head
 library
   exposed-modules:
       Lib
+      PageData
+      Parser
   other-modules:
       Paths_Project
   hs-source-dirs:
@@ -33,7 +35,15 @@ library
   build-depends:
       HDBC
     , aeson
-    , base >=4.7 && <5
+    , base >=4.2 && <5
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , regex-compat
+    , scalpel
+    , tagsoup
+    , text
     , wreq
   default-language: Haskell2010
 
@@ -48,7 +58,15 @@ executable Project-exe
       HDBC
     , Project
     , aeson
-    , base >=4.7 && <5
+    , base >=4.2 && <5
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , regex-compat
+    , scalpel
+    , tagsoup
+    , text
     , wreq
   default-language: Haskell2010
 
@@ -64,6 +82,14 @@ test-suite Project-test
       HDBC
     , Project
     , aeson
-    , base >=4.7 && <5
+    , base >=4.2 && <5
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , regex-compat
+    , scalpel
+    , tagsoup
+    , text
     , wreq
   default-language: Haskell2010

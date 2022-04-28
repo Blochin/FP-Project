@@ -20,10 +20,18 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/Project#readme>
 
 dependencies:
-- HDBC
-- wreq
 - aeson
-- base >= 4.7 && < 5
+- bytestring
+- text
+- scalpel
+- tagsoup
+- containers
+- regex-compat
+- directory
+- filepath
+- wreq
+- HDBC
+- base >= 4.2 && < 5
 
 library:
   source-dirs: src
