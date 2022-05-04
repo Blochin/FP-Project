@@ -1,8 +1,8 @@
 module Main where
 
-import Lib
-import Network.Wreq -- requests
+import Network.Wreq () -- requests
 import Database.HDBC -- DB
+import Lib (searchEngineModule)
 
 main :: IO ()
-main = loader
+main = searchEngineModule

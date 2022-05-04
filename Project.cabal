@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Loader
       PageData
       Parser
   other-modules:
@@ -42,6 +43,7 @@ library
     , filepath
     , regex-compat
     , scalpel
+    , split
     , tagsoup
     , text
     , wreq
@@ -65,6 +67,7 @@ executable Project-exe
     , filepath
     , regex-compat
     , scalpel
+    , split
     , tagsoup
     , text
     , wreq
@@ -89,6 +92,7 @@ test-suite Project-test
     , filepath
     , regex-compat
     , scalpel
+    , split
     , tagsoup
     , text
     , wreq
