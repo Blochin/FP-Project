@@ -25,6 +25,7 @@ dependencies:
 - text
 - scalpel
 - tagsoup
+- split
 - containers
 - regex-compat
 - directory
