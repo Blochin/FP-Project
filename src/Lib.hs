@@ -6,15 +6,18 @@ module Lib
     ) where
 
 import PageData ( PageData )
-import Parser ( parser )
-import Loader ( getHtml, loadData )
+import Parser ( parser, linkHtmlParser, something, linkParser )
+import Loader ( getHtml, loadData, getUrl )
 
 searchEngine :: IO [Maybe PageData] -> IO ()
 searchEngine pages = do
   unpackedPages <- pages :: IO[Maybe PageData]
-  let array = map(parser . getHtml) unpackedPages
-  --let array = map(parser . showHtml) unpackedPages it's same as let array = map(\s -> parser $ showHtml s) unpackedPages
-  print array
+
+  let currentLinks = linkParser $ map(\s -> getUrl s) unpackedPages
+  let words = map(parser . getHtml) unpackedPages
+  let links = map(linkHtmlParser . getHtml) unpackedPages
+  
+  print links
 
 searchEngineModule :: IO ()
 searchEngineModule = do
