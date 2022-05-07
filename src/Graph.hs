@@ -44,4 +44,3 @@ markLinks currentLinks otherLinks = do
 createGraph :: Sel2 a b => [a] -> [b]
 createGraph mappedLinks = do
     map(\s -> sel2  s )mappedLinks
-
