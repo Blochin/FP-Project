@@ -7,8 +7,7 @@ import           Text.Printf (printf)
 
 
 type Node = Int
-type PRValue = Double
-type PageRank = Map Node PRValue
+type PRValue = Doubleype PageRank = Map Node PRValue
 type InboundEdges = Map Node [Node]
 type OutboundEdges = InboundEdges
 
