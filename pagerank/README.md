@@ -1,1 +1,0 @@
-This is an implementation of the [PageRank](http://en.wikipedia.org/wiki/PageRank) algorithm in Haskell.
