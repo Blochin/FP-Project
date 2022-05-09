@@ -9,6 +9,8 @@ import PageData ( PageData )
 import Parser ( parser, linkHtmlParser, something, linkParser )
 import Loader ( getHtml, loadData, getUrl )
 import Graph ( createGraph, markLinks)
+import InvertedIndex (invertedIndex)
+
 
 searchEngine :: IO [Maybe PageData] -> IO ()
 searchEngine pages = do
@@ -18,11 +20,15 @@ searchEngine pages = do
   let currentLinks = linkParser $ map getUrl unpackedPages
   let otherLinks = map(linkHtmlParser . getHtml) unpackedPages
 
-  let mappedLinks = map (\s -> (getUrl s, concatMap(linkHtmlParser . getHtml) unpackedPages )) unpackedPages
-  let mappedWords = map (\s -> (getUrl s, concatMap(parser . getHtml) unpackedPages )) unpackedPages
+  let mappedLinks = map (\s -> (getUrl s, linkHtmlParser $ getHtml s )) unpackedPages
+  let mappedWords = map (\s -> (getUrl s, parser $ getHtml s )) unpackedPages
+  let mappedInvertedWords = invertedIndex "sete" mappedWords
 
-  print $ markLinks currentLinks otherLinks
-  print $ createGraph mappedLinks
+  --print mappedLinks
+  --print mappedWords
+  --print $ markLinks currentLinks otherLinks
+  --print $ createGraph mappedLinks
+  print mappedInvertedWords
   
 
 searchEngineModule :: IO ()

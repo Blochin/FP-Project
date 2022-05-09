@@ -46,7 +46,7 @@ parser html = do
     let textElementTags = [ "<h1>"  ,"<h2>" ,"<h3>",
                             "<h4>"  ,"<h5>" ,"<h6>",
                             "<p>"   ,"<i>"  ,"<em>",
-                            "<span>","<a>"  ,"<div>"]
+                            "<span>", "<div>"]
 
     let fromBody = dropWhile (~/= "<body>") . takeWhile (~/= "</body>")
     let tags = fromBody $ parseTags html
