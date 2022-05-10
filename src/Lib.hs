@@ -8,7 +8,7 @@ module Lib
 import PageData ( PageData )
 import Parser ( parser, linkHtmlParser, something, linkParser, oneLinkParser )
 import Loader ( getHtml, loadData, getUrl )
-import Graph ( createGraph, markLinks)
+import Graph ( createGraph, markLinks, getAllIndexes)
 import InvertedIndex (invertedIndex)
 import Data.Tuple.Select ( Sel2(sel2), Sel1 (sel1) )
 
@@ -31,6 +31,7 @@ searchEngine pages = do
   let markedLinks = markLinks currentLinks otherLinks
   print $ createGraph mappedLinksButDifferent markedLinks
   --print mappedInvertedWords
+  print (getAllIndexes mappedLinksButDifferent markedLinks)
 
 searchEngineModule :: IO ()
 searchEngineModule = do

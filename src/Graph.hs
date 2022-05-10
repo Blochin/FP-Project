@@ -3,7 +3,8 @@
 
 module Graph
     ( createGraph,
-    markLinks
+    markLinks,
+    getAllIndexes
     ) where
 
 import Data.Map ( insert )
@@ -45,7 +46,14 @@ translateUrl :: (Foldable t, Eq a1, Sel1 a2 a1) => a1 -> t a2 -> Maybe a2
 translateUrl url urlArray = do
     find(\s -> sel1 s == url )urlArray
 
-
+getIndex :: (Show a1, Ord a1, Eq p, Sel1 a2 p, Sel2 a2 a1, Num a1) => [a2] -> p -> String
+getIndex allLinksWithIndex word = do
+    let index = map (\s -> (if word == sel1 s then sel2 s else -1)) allLinksWithIndex
+    show $ maximum index
+    
+getAllIndexes :: (Sel1 a p, Sel1 a2 p, Show a1, Ord a1, Num a1, Sel2 a2 a1, Sel2 a p, Eq p) => [[a]] -> [a2] -> [[(String, String)]]
+getAllIndexes mappedLinksButDifferent markedLinks = do
+    map(map (\s -> (getIndex markedLinks (sel1 s),getIndex markedLinks (sel2 s)))) mappedLinksButDifferent
 
 createGraph :: (Eq a1, Foldable t, Sel1 a2 a1, Sel1 a a1, Sel2 a a1) => [[a]] -> t a2 -> [[(Maybe a2, Maybe a2)]]
 createGraph mappedLinks markedLinks = do
