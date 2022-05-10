@@ -1,3 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Pagerank
+    ( startPagerank,
+    ) where
+
 import           Data.Map    (Map, empty, insert, insertWith, lookup,
                               mapWithKey, member, size)
 import           Data.Maybe  (fromJust)
@@ -7,7 +14,8 @@ import           Text.Printf (printf)
 
 
 type Node = Int
-type PRValue = Doubleype PageRank = Map Node PRValue
+type PRValue = Double
+type PageRank = Map Node PRValue
 type InboundEdges = Map Node [Node]
 type OutboundEdges = InboundEdges
 
@@ -76,9 +84,9 @@ postProcess (iEdges, oEdges, maxNode) =
                 addAllNodes (n-1) $ insertWith (\new old -> new ++ old) n [] iEdges
 
 
-parseGraph :: String -> (InboundEdges, OutboundEdges, PageRank)
+parseGraph :: [String] -> (InboundEdges, OutboundEdges, PageRank)
 parseGraph input =
-    let ls = lines input
+    let ls = input
         (iEdges, oEdges) = postProcess $ foldl parseLine (empty, empty, 0) ls
         numNodes = size iEdges
         in (iEdges, oEdges, newPageRank numNodes)
@@ -123,18 +131,9 @@ loopProcess n dampingFactor iEdges oEdges pageRank =
 
 -- inputFile numIters dampingFactor -> PR
 -- Use let without in in the body of a do-block, and in the part after the | in a list comprehension. Anywhere else, use let ... in ...
-startPagerank :: String -> Int -> Double -> PageRank
+
+startPagerank :: [String] -> Int -> Double -> PageRank
 startPagerank inputFile numIters dampingFactor =
     -- parseGraph ma na vstupe .txt a na vystupe inbounding, outbounding a PR, ktory dalej pouzijeme v loopProcess
     let (iEdges, oEdges, pageRank) = parseGraph inputFile
-        in loopProcess numIters dampingFactor iEdges oEdges pageRank
-
-main :: IO ()
-main = do
-    let numIters = 10
-    -- pri algoritme pagrank sa zvykne pouzivat 0.85 alebo 0.8
-    let dampingFactor = 0.85
-    -- v txt mame ulozeny graf - indexy stranok vo formate "'odkial' 'kam'" 
-    inputFile <- readFile "input2.txt"
-    -- na vstupe mame inputFile, pocet iteracii a damping factor nastaveny ako konstantu 0.85
-    writeFile "output.txt" $ show $ startPagerank inputFile numIters dampingFactor 
+        in loopProcess numIters dampingFactor iEdges oEdges pageRank  

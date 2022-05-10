@@ -30,6 +30,7 @@ library
       Lib
       Loader
       PageData
+      Pagerank
       Parser
   other-modules:
       Paths_Project
