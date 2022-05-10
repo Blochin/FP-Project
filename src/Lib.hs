@@ -6,7 +6,7 @@ module Lib
     ) where
 
 import PageData ( PageData )
-import Parser ( parser, linkHtmlParser, something, linkParser )
+import Parser ( parser, linkHtmlParser, something, linkParser, oneLinkParser )
 import Loader ( getHtml, loadData, getUrl )
 import Graph ( createGraph, markLinks)
 import InvertedIndex (invertedIndex)
@@ -21,15 +21,15 @@ searchEngine pages = do
   let currentLinks = linkParser $ map getUrl unpackedPages
   let otherLinks = map(linkHtmlParser . getHtml) unpackedPages
 
-  let mappedLinks = map (\s -> (getUrl s, linkHtmlParser $ getHtml s )) unpackedPages
+  let mappedLinks = map (\s -> (oneLinkParser $ getUrl s, linkHtmlParser $ getHtml s )) unpackedPages
   let mappedLinksButDifferent = map(\s->map(\s2->(sel1 s,s2)) $ sel2 s) mappedLinks
   let mappedWords = map (\s -> (getUrl s, parser $ getHtml s )) unpackedPages
   let mappedInvertedWords = invertedIndex "sete" mappedWords
 
-  print mappedLinksButDifferent
+  --print mappedLinksButDifferent
   --print mappedWords
-  --print $ markLinks currentLinks otherLinks
-  --print $ createGraph mappedLinks
+  let markedLinks = markLinks currentLinks otherLinks
+  print $ createGraph mappedLinksButDifferent markedLinks
   --print mappedInvertedWords
 
 searchEngineModule :: IO ()
