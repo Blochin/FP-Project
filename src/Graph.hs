@@ -8,7 +8,7 @@ module Graph
 
 import Data.Map ( insert )
 import Data.Char ()
-import Data.List ( nubBy )
+import Data.List ( nubBy, find )
 import Parser ( linkHtmlParser, linkParser )
 import Loader (getUrl, getHtml)
 import PageData ( PageData )
@@ -41,6 +41,12 @@ markLinks currentLinks otherLinks = do
     let allLinks = merge currentLinks mergedOtherLinks
     createIndexPageTouple allLinks
 
-createGraph :: Sel2 a b => [a] -> [b]
-createGraph mappedLinks = do
-    map(\s -> sel2  s )mappedLinks
+translateUrl :: (Foldable t, Eq a1, Sel1 a2 a1) => a1 -> t a2 -> Maybe a2
+translateUrl url urlArray = do
+    find(\s -> sel1 s == url )urlArray
+
+
+
+createGraph :: (Eq a1, Foldable t, Sel1 a2 a1, Sel1 a a1, Sel2 a a1) => [[a]] -> t a2 -> [[(Maybe a2, Maybe a2)]]
+createGraph mappedLinks markedLinks = do
+    map(\s-> map(\s2->(translateUrl (sel1 s2) markedLinks,translateUrl (sel2 s2) markedLinks))s)mappedLinks

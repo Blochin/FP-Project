@@ -8,6 +8,7 @@ module Parser
     ( something,
     linkParser,
     linkHtmlParser,
+    oneLinkParser,
     parser,
     ) where
 
@@ -70,6 +71,13 @@ linkHtmlParser html = do
 linkParser :: [String] -> [String]
 linkParser link = do
     map(\s -> if checkIfIndex2Exist s then s!!2 else " ") $ map(\s ->  Data.List.Split.splitOn "/" s) link
+
+oneLinkParser :: String -> String
+oneLinkParser link = do
+    if checkIfIndex2Exist link
+        then (Data.List.Split.splitOn "/"  link)!!2
+        else "Can't match with link"
+    
 
 something :: IO ()
 something = do
