@@ -28,11 +28,11 @@ searchEngine pages = do
   let markedLinks = markLinks currentLinks otherLinks
   let numIters = 10
   let dampingFactor = 0.85
-  let inputFile = getInputForPageRank mappedLinksButDifferent markedLinks
+  print $ getInputForPageRank mappedLinksButDifferent markedLinks
   -- v txt mame ulozeny graf - indexy stranok vo formate "'odkial' 'kam'" 
 --  inputFile <- readFile "data/input2.txt"
   -- na vstupe mame inputFile, pocet iteracii a damping factor nastaveny ako konstantu 0.85
-  writeFile "data/output2.txt" $ show $ startPagerank inputFile numIters dampingFactor 
+  --writeFile "data/output2.txt" $ show $ startPagerank inputFile numIters dampingFactor 
 
 
 searchEngineModule :: IO ()
