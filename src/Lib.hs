@@ -6,7 +6,7 @@ module Lib
     ) where
 
 import PageData ( PageData )
-import Parser ( parser, linkHtmlParser, something, linkParser, oneLinkParser )
+import Parser ( parser, linkHtmlParser,linkParser, oneLinkParser )
 import Loader ( getHtml, loadData, getUrl )
 import Graph ( createGraph, markLinks, getAllIndexes, getInputForPageRank)
 import Pagerank ( startPagerank)
@@ -26,14 +26,14 @@ searchEngine pages = do
   let mappedWords = map (\s -> (getUrl s, parser $ getHtml s )) unpackedPages
   let mappedInvertedWords = invertedIndex "sete" mappedWords
   let markedLinks = markLinks currentLinks otherLinks
-  let numIters = 10
-  let dampingFactor = 0.85
+  let numIters = 2
+  let dampingFactor = 0.15
   print $ getInputForPageRank mappedLinksButDifferent markedLinks
   -- v txt mame ulozeny graf - indexy stranok vo formate "'odkial' 'kam'" 
---  inputFile <- readFile "data/input2.txt"
+  -- inputFile <- readFile "data/input2.txt"
   -- na vstupe mame inputFile, pocet iteracii a damping factor nastaveny ako konstantu 0.85
   --writeFile "data/output2.txt" $ show $ startPagerank inputFile numIters dampingFactor 
-
+  
 
 searchEngineModule :: IO ()
 searchEngineModule = do

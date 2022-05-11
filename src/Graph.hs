@@ -26,10 +26,15 @@ rmDup lst = go lst []
               | any (\(a, _) -> a == fst x) seen = go xs seen
               | otherwise = go xs (seen ++ [x])
 
+arrayRmDup :: Eq a => [a] -> [a]
+arrayRmDup [] = []
+arrayRmDup (x:xs) = x : arrayRmDup (filter (\y -> not(x == y)) xs)
+
 merge :: [a] -> [a] -> [a]
 merge xs     []     = xs
 merge []     ys     = ys
 merge (x:xs) (y:ys) = x : y : merge xs ys
+
 
 createIndexPageTouple :: Eq a => [a] -> [(a, Int)]
 createIndexPageTouple links = do
@@ -40,7 +45,7 @@ createIndexPageTouple links = do
 markLinks :: (Eq a, Foldable t) => [a] -> t [a] -> [(a, Int)]
 markLinks currentLinks otherLinks = do
     let mergedOtherLinks = concat otherLinks
-    let allLinks = merge currentLinks mergedOtherLinks
+    let allLinks = arrayRmDup $ merge currentLinks mergedOtherLinks
     createIndexPageTouple allLinks
 
 translateUrl :: (Foldable t, Eq a1, Sel1 a2 a1) => a1 -> t a2 -> Maybe a2
@@ -59,9 +64,6 @@ getAllIndexes mappedLinksButDifferent markedLinks = do
 createGraph :: (Eq a1, Foldable t, Sel1 a2 a1, Sel1 a a1, Sel2 a a1) => [[a]] -> t a2 -> [[(Maybe a2, Maybe a2)]]
 createGraph mappedLinks markedLinks = do
     map(\s-> map(\s2->(translateUrl (sel1 s2) markedLinks,translateUrl (sel2 s2) markedLinks))s)mappedLinks
-    
-
-    
 
 getInputForPageRank :: (Sel1 a p, Sel1 a2 p, Show a1, Ord a1, Num a1, Sel2 a2 a1, Sel2 a p, Eq p) => [[a]] -> [a2] -> [String]
 getInputForPageRank mappedLinksButDifferent markedLinks = do
