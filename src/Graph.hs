@@ -67,5 +67,5 @@ createGraph mappedLinks markedLinks = do
 
 getInputForPageRank :: (Sel1 a p, Sel1 a2 p, Show a1, Ord a1, Num a1, Sel2 a2 a1, Sel2 a p, Eq p) => [[a]] -> [a2] -> [String]
 getInputForPageRank mappedLinksButDifferent markedLinks = do
-    let twoDimArray =  map(map(\s -> if sel1 s /= sel2 s then  getIndex markedLinks (sel1 s)  ++ " " ++ getIndex markedLinks (sel2 s)else "")) mappedLinksButDifferent
-    filter(/= "") $ concat  twoDimArray
+    let twoDimArray =  map(map(\s ->getIndex markedLinks (sel1 s)  ++ " " ++ getIndex markedLinks (sel2 s))) mappedLinksButDifferent
+    concat  twoDimArray
