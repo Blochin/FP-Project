@@ -5,8 +5,7 @@
 {-# HLINT ignore "Avoid lambda" #-}
 
 module Parser
-    ( something,
-    linkParser,
+    (linkParser,
     linkHtmlParser,
     oneLinkParser,
     parser,
@@ -34,13 +33,11 @@ getTagText selector tags =
     where
         f = fromTagText . head . filter isTagText
 
-
 getHrefLink :: TagRep t => t -> [Tag String] -> [String]
 getHrefLink selector tags =
     map f $ sections (~== selector)  tags
     where
         f = fromAttrib "href"  . head . filter isTagOpen
-
 
 parser :: String -> [String]
 parser html = do
@@ -54,10 +51,13 @@ parser html = do
 
     rmDup $ concatMap(\s -> concatMap(\s2 -> words s2)s) $ filter(/=[]) $ map(\s -> filter(/= " ") $ getTagText s tags)textElementTags
 
-
 checkIfIndex2Exist :: Foldable t => t a -> Bool
 checkIfIndex2Exist array = do
     length array > 3
+
+checkIfIndex0Exist :: Foldable t => t a -> Bool
+checkIfIndex0Exist array = do
+    length array > 1
 
 linkHtmlParser :: String -> [String]
 linkHtmlParser html = do
@@ -66,24 +66,14 @@ linkHtmlParser html = do
     let fromBody = dropWhile (~/= "<body>") . takeWhile (~/= "</body>")
     let tags = fromBody $ parseTags html
 
-    filter(/= " ") $  map(\s -> if checkIfIndex2Exist s then s!!2 else " ") $ concatMap(\s -> map( \s2 -> Data.List.Split.splitOn "/" s2) s) $ filter(/=[]) $ map(\s -> filter(/= " ") $ getHrefLink s tags)textElementTags
+    filter(/= " ") $  map(\s -> s!!0) $ concatMap(\s -> map( \s2 -> Data.List.Split.splitOn "?" s2) s) $ filter(/=[]) $ map(\s -> filter(/= " ") $ getHrefLink s tags)textElementTags
 
 linkParser :: [String] -> [String]
 linkParser link = do
-    map(\s -> if checkIfIndex2Exist s then s!!2 else " ") $ map(\s ->  Data.List.Split.splitOn "/" s) link
+    map(\s -> s!!0) $ map(\s ->  Data.List.Split.splitOn "?" s) link
 
 oneLinkParser :: String -> String
 oneLinkParser link = do
     if checkIfIndex2Exist link
-        then (Data.List.Split.splitOn "/"  link)!!2
+        then (Data.List.Split.splitOn "?"  link)!!0
         else "Can't match with link"
-    
-
-something :: IO ()
-something = do
-    --print $ innerText  $ parseTags "<h1>It Works</h1>"
-    --print $ parseTags "<h1>It Works</h1><h1>Nice</h1>"
-    --print $ parser "<h1>It Works</h1><h1>Nice</h1><script> isHereText ?</script>"
-    --print "xd"
-    -- for debug
-    print $ linkHtmlParser "<script>isHereText?</script><body><h1>It Works</h1><body><h1>It Works</h1><a href='got it'></a><script>isHereText?</script><h2>Nice2</h2><h2>Nice2</h2></body><script>isHereText?</script>"
