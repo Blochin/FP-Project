@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      ForwardIndex
       Graph
       InvertedIndex
       Lib
