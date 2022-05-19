@@ -14,6 +14,7 @@ import InvertedIndex (invertedIndex, invertedIndex2, indexWithPageRank)
 import Data.Tuple.Select ( Sel2(sel2), Sel1 (sel1) )
 import Data.List (nub)
 import Data.Map ((!))
+import Control.Monad
 
 
 searchEngine :: IO [Maybe PageData] -> IO ()
@@ -23,10 +24,12 @@ searchEngine pages = do
   let words = map(parser . getHtml) unpackedPages
   let currentLinks = linkParser $ map getUrl unpackedPages
   let otherLinks = map(linkHtmlParser . getHtml) unpackedPages
+
   let mappedLinks = map (\s -> (oneLinkParser $ getUrl s, linkHtmlParser $ getHtml s )) unpackedPages
   let mappedLinksButDifferent = map(\s-> filter(/= ("","")) $ map(\s2-> if(sel1 s /= s2) then (sel1 s,s2) else ("","")) $ sel2 s) mappedLinks
   let mappedWords = map (\s -> (getUrl s, parser $ getHtml s )) unpackedPages
   let invertedIndexMap = invertedIndex2 words mappedWords
+  
   let markedLinks = markLinks currentLinks otherLinks
   let numIters = 10
   let dampingFactor = 0.75
@@ -36,14 +39,20 @@ searchEngine pages = do
   -- na vstupe mame inputFile, pocet iteracii a damping factor nastaveny ako konstantu 0.85
   let pageRankWords = startPagerank inputForPageRank numIters dampingFactor  
 --  tuto by bol ten nekonecny cyklus
-  let result = lookup "sete" invertedIndexMap
-  case result of
-      Nothing  -> print "Zadane slovo sa nenaslo"
-      Just result -> print $ indexWithPageRank result markedLinks pageRankWords
+
 --  writeFile "data/output2.txt" $ show $ startPagerank inputFile numIters dampingFactor
+
+  let loop = do
+            putStrLn "Search for word"
+            word <- getLine
+            let result = lookup word invertedIndexMap
+            when (word /= "Stop Search") loop
+            case result of
+              Nothing  -> print "Zadane slovo sa nenaslo"
+              Just result -> print $ indexWithPageRank result markedLinks pageRankWords
+  loop
 
 searchEngineModule :: IO ()
 searchEngineModule = do
     let decoded = loadData "data/data.json"
     searchEngine decoded
-
