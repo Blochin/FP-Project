@@ -13,10 +13,8 @@ import           Prelude     hiding (lookup)
 import           Text.Printf (printf)
 
 
-type Node = Int
-type PRValue = Double
-type PageRank = Map Node PRValue
-type InboundEdges = Map Node [Node]
+type PageRank = Map Int Double
+type InboundEdges = Map Int [Int]
 type OutboundEdges = InboundEdges
 
 -- ZDROJ: 
@@ -26,7 +24,7 @@ type OutboundEdges = InboundEdges
 -- https://computerscience.chemeketa.edu/cs160Reader/_static/pageRankApp/index.html
 
 
-parseLine :: (InboundEdges, OutboundEdges, Node) -> String -> (InboundEdges, OutboundEdges, Node)
+parseLine :: (InboundEdges, OutboundEdges, Int) -> String -> (InboundEdges, OutboundEdges, Int)
 parseLine (iEdges, oEdges, maxNode) line =
     -- zo suboru parsujeme vstup a ukladame jednotlive hrany do inbound a outbound edges
     let ws = words line
@@ -35,7 +33,7 @@ parseLine (iEdges, oEdges, maxNode) line =
             insertWith plusNode from [to] oEdges,
             max to (max maxNode from))
     where
-        plusNode :: [Node] -> [Node] -> [Node]
+        plusNode :: [Int] -> [Int] -> [Int]
         plusNode new_node old_node =
             new_node ++ old_node
 
@@ -57,7 +55,7 @@ newPageRank n =
 -- to every other node. 
 -- ?????? neviem co je toto za bullshit
 -- tu prechadzame vsetkymi in/out edges 
-postProcess :: (InboundEdges, OutboundEdges, Node) -> (InboundEdges, OutboundEdges)
+postProcess :: (InboundEdges, OutboundEdges, Int) -> (InboundEdges, OutboundEdges)
 postProcess (iEdges, oEdges, maxNode) =
     let numNodes = maxNode + 1
         newIEdges = addAllNodes (numNodes-1) iEdges

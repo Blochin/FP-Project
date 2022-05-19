@@ -10,7 +10,7 @@ module Graph
 
 import Data.Map ( insert )
 import Data.Char ()
-import Data.List ( nubBy, find )
+import Data.List ( nubBy, find, nub )
 import Parser ( linkHtmlParser, linkParser )
 import Loader (getUrl, getHtml)
 import PageData ( PageData )
@@ -67,5 +67,6 @@ createGraph mappedLinks markedLinks = do
 
 getInputForPageRank :: (Sel1 a p, Sel1 a2 p, Show a1, Ord a1, Num a1, Sel2 a2 a1, Sel2 a p, Eq p) => [[a]] -> [a2] -> [String]
 getInputForPageRank mappedLinksButDifferent markedLinks = do
-    let twoDimArray =  map(map(\s ->getIndex markedLinks (sel1 s)  ++ " " ++ getIndex markedLinks (sel2 s))) mappedLinksButDifferent
-    concat  twoDimArray
+    let twoDimArray =  map(map(\s -> getIndex markedLinks (sel1 s)  ++ " " ++ getIndex markedLinks (sel2 s))) mappedLinksButDifferent
+    let inputForPageRank = concat  twoDimArray
+    nub inputForPageRank
