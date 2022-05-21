@@ -58,15 +58,15 @@ getIndex allLinksWithIndex word = do
     show $ maximum index
     
 getAllIndexes :: (Sel1 a p, Sel1 a2 p, Show a1, Ord a1, Num a1, Sel2 a2 a1, Sel2 a p, Eq p) => [[a]] -> [a2] -> [[(String, String)]]
-getAllIndexes mappedLinksButDifferent markedLinks = do
-    map(map (\s -> (getIndex markedLinks (sel1 s),getIndex markedLinks (sel2 s)))) mappedLinksButDifferent
+getAllIndexes mappedLinks markedLinks = do
+    map(map (\s -> (getIndex markedLinks (sel1 s),getIndex markedLinks (sel2 s)))) mappedLinks
 
 createGraph :: (Eq a1, Foldable t, Sel1 a2 a1, Sel1 a a1, Sel2 a a1) => [[a]] -> t a2 -> [[(Maybe a2, Maybe a2)]]
 createGraph mappedLinks markedLinks = do
     map(\s-> map(\s2->(translateUrl (sel1 s2) markedLinks,translateUrl (sel2 s2) markedLinks))s)mappedLinks
 
 getInputForPageRank :: (Sel1 a p, Sel1 a2 p, Show a1, Ord a1, Num a1, Sel2 a2 a1, Sel2 a p, Eq p) => [[a]] -> [a2] -> [String]
-getInputForPageRank mappedLinksButDifferent markedLinks = do
-    let twoDimArray =  map(map(\s -> getIndex markedLinks (sel1 s)  ++ " " ++ getIndex markedLinks (sel2 s))) mappedLinksButDifferent
+getInputForPageRank mappedLinks markedLinks = do
+    let twoDimArray =  map(map(\s -> getIndex markedLinks (sel1 s)  ++ " " ++ getIndex markedLinks (sel2 s))) mappedLinks
     let inputForPageRank = concat  twoDimArray
     nub inputForPageRank
