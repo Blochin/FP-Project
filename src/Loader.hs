@@ -30,11 +30,20 @@ loadData file = do
 
 getUrl :: Maybe PageData -> String
 getUrl (Just pageData) = unpack $ url pageData
-getUrl Nothing = undefined
+getUrl Nothing = " "
 
 getHtml :: Maybe PageData -> String
 getHtml (Just pageData) = unpack $ html_content pageData
-getHtml Nothing = undefined
+getHtml Nothing = " "
+
+{-getUrl :: Maybe PageData -> Maybe String
+getUrl (Just pageData) = Just $ unpack $ url pageData
+getUrl Nothing = Nothing
+
+getHtml :: Maybe PageData -> Maybe String
+getHtml (Just pageData) = Just $ unpack $ html_content pageData
+getHtml Nothing = Nothing
+-}
 
 printUrl :: IO [Maybe PageData] -> IO ()
 printUrl packedobject = do

@@ -48,5 +48,5 @@ searchEngine pages = do
 
 searchEngineModule :: IO ()
 searchEngineModule = do
-    let decoded = loadData "data/data.json"
+    let decoded = loadData "data/data_1000.json"
     searchEngine decoded
