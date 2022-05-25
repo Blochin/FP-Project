@@ -1,3 +1,5 @@
 .stack-work/
 *~
 archive/
+data/
+words.txt

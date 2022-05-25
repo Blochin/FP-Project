@@ -79,7 +79,7 @@ parser :: String -> [String]
 parser html = do
     let textElementTags = [ "<h1>"  ,"<h2>" ,"<h3>",
                             "<h4>"  ,"<h5>" ,"<h6>",
-                            "<p>"   ,"<i>"  ,"<div>"]
+                            "<p>"   ,"<i>" ]
 
 
     let fromBody = dropWhile (~/= "<body>") . takeWhile (~/= "</body>")
