@@ -50,11 +50,6 @@ newPageRank n =
             go (n-1) v $ insert (n-1) v pr 
         
 
--- The goal of postProcess is to deal with the nodes that have no outbound
--- edges, in which case they should be treated like they have outbound edges
--- to every other node. 
--- ?????? neviem co je toto za bullshit
--- tu prechadzame vsetkymi in/out edges 
 postProcess :: (InboundEdges, OutboundEdges, Int) -> (InboundEdges, OutboundEdges)
 postProcess (iEdges, oEdges, maxNode) =
     let numNodes = maxNode + 1
